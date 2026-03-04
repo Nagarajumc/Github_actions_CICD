@@ -4,3 +4,6 @@ build
 .github
 Dockerfile
 .dockerignore
+*.log
+.env
+.env.*
