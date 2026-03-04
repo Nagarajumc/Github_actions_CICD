@@ -1,7 +1,10 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --no-audit --no-fund
+
+RUN npm config set loglevel verbose \
+ && npm install --no-audit --no-fund --verbos
+
 COPY . .
 RUN npm run build
 
