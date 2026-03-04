@@ -1,0 +1,40 @@
+name: Deploy React App to EC2
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Upload project to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "."
+          target: "app"
+
+      - name: SSH & Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd app
+            if ! command -v docker >/dev/null; then
+              sudo apt update -y || sudo yum update -y
+              sudo apt install -y docker.io || sudo yum install -y docker
+              sudo systemctl start docker || sudo service docker start
+            fi
+            sudo docker build -t reactapp .
+            sudo docker rm -f reactapp 2>/dev/null || true
+            sudo docker run -d -p 80:80 --restart=always --name reactapp reactapp

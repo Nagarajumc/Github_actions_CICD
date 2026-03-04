@@ -1,0 +1,4 @@
+.App { text-align: center; }
+.App-logo { height: 40vmin; animation: spin 20s infinite linear; }
+.App-header { background: #0b132b; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
+@keyframes spin { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
