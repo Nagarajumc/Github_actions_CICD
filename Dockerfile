@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm config set loglevel verbose \
- && npm install --no-audit --no-fund --verbos
+ && npm install --no-audit --no-fund 
 
 COPY . .
 RUN npm run build
