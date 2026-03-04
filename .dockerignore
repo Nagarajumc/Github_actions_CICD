@@ -7,3 +7,4 @@ Dockerfile
 *.log
 .env
 .env.*
+package-lock.json
